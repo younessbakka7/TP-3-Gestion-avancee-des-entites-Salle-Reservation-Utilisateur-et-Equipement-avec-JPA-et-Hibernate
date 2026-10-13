@@ -1,12 +1,8 @@
 package com.example.jpa.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Utilisateur {
@@ -25,6 +21,9 @@ public class Utilisateur {
     @JoinColumn(name = "salle_id")
     private Salle salle;
 
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    private List<Reservation> reservations = new ArrayList<>();
+
     // Constructeurs
     public Utilisateur() {}
 
@@ -32,6 +31,11 @@ public class Utilisateur {
         this.nom = nom;
         this.email = email;
         this.salle = salle;
+    }
+
+    public Utilisateur(String nom, String email) {
+        this.nom = nom;
+        this.email = email;
     }
 
     // Getters et Setters
@@ -61,6 +65,14 @@ public class Utilisateur {
 
     public void setSalle(Salle salle) {
         this.salle = salle;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     @Override

@@ -1,10 +1,8 @@
 package com.example.jpa.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Column;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Salle {
@@ -19,12 +17,31 @@ public class Salle {
     @Column(nullable = false)
     private int capacite;
 
+    @ManyToMany
+    @JoinTable(
+        name = "salle_equipements",
+        joinColumns = @JoinColumn(name = "salle_id"),
+        inverseJoinColumns = @JoinColumn(name = "equipement_id")
+    )
+    private List<Equipement> equipements = new ArrayList<>();
+
+    @OneToMany(mappedBy = "salle", cascade = CascadeType.ALL)
+    private List<Reservation> reservations = new ArrayList<>();
+
     // Constructeurs
     public Salle() {}
 
     public Salle(String nom, int capacite) {
         this.nom = nom;
         this.capacite = capacite;
+    }
+
+    // Helper methods
+    public void addEquipement(Equipement equipement) {
+        if (!equipements.contains(equipement)) {
+            equipements.add(equipement);
+            equipement.getSalles().add(this);
+        }
     }
 
     // Getters et Setters
@@ -46,6 +63,22 @@ public class Salle {
 
     public void setCapacite(int capacite) {
         this.capacite = capacite;
+    }
+
+    public List<Equipement> getEquipements() {
+        return equipements;
+    }
+
+    public void setEquipements(List<Equipement> equipements) {
+        this.equipements = equipements;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     @Override

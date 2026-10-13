@@ -9,6 +9,8 @@
 
         <class>com.example.jpa.entities.Salle</class>
         <class>com.example.jpa.entities.Utilisateur</class>
+        <class>com.example.jpa.entities.Equipement</class>
+        <class>com.example.jpa.entities.Reservation</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver"
@@ -27,7 +29,7 @@
                       value="org.hibernate.dialect.H2Dialect"/>
 
             <property name="hibernate.hbm2ddl.auto"
-                      value="update"/>
+                      value="create"/>
 
             <property name="hibernate.show_sql"
                       value="true"/>

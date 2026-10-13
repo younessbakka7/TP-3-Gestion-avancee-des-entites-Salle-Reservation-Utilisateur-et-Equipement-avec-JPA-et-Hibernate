@@ -1,5 +1,7 @@
 package com.example.jpa.test;
 
+import com.example.jpa.entities.Equipement;
+import com.example.jpa.entities.Reservation;
 import com.example.jpa.entities.Salle;
 import com.example.jpa.entities.Utilisateur;
 import com.example.jpa.service.ServiceGestion;
@@ -7,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -61,5 +64,37 @@ public class ServiceGestionTest {
 
         List<Utilisateur> utilisateurs = service.utilisateursParSalle("Salle C");
         assertEquals(2, utilisateurs.size());
+    }
+
+    @Test
+    public void testCreationEquipement() {
+        Equipement eq = new Equipement("Microphone sans fil", "Micro UHF de conférence");
+        service.ajouterEquipement(eq);
+
+        List<Equipement> equipements = service.listerEquipements();
+        assertFalse(equipements.isEmpty());
+        assertTrue(equipements.stream().anyMatch(e -> e.getNom().equals("Microphone sans fil")));
+    }
+
+    @Test
+    public void testCreationReservation() {
+        Salle salle = new Salle("Salle D", 40);
+        service.ajouterSalle(salle);
+
+        Utilisateur user = new Utilisateur("younessRes", "younessres@gmail.com", salle);
+        service.ajouterUtilisateur(user);
+
+        Reservation res = new Reservation(
+                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(1),
+                "Réunion Projet TP 3",
+                user,
+                salle
+        );
+        service.ajouterReservation(res);
+
+        List<Reservation> reservations = service.reservationsParUtilisateur("younessres@gmail.com");
+        assertFalse(reservations.isEmpty());
+        assertEquals("Réunion Projet TP 3", reservations.get(0).getMotif());
     }
 }
